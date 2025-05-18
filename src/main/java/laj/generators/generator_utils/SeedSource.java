@@ -9,10 +9,12 @@ package laj.generators.generator_utils;
  * RANDOM_ORG: A RANDOM.ORG szolgáltatást használja véletlenszám-generáláshoz.
  * ANU_QUANTUM: Az ANU Quantum Random Number Algorithm szolgáltatást veszi igénybe.
  * FOURMILAB: A Fourmilab HotBits szolgáltatást alkalmazza véletlenszámok előállításához.
+ * NANOTIME: A rendszer nanoszekundum időbélyegét használja véletlenszám-generáláshoz.
  */
 public enum SeedSource {
     SYSTEM,
     RANDOM_ORG,
     ANU_QUANTUM,
-    FOURMILAB
+    FOURMILAB,
+    NANOTIME
 }

@@ -18,6 +18,7 @@ import java.util.Properties;
  */
 @Log4j2
 public class Seeder {
+    @Getter
     private final SeedSource source;
     private static final String PROPERTIES_FILE = "seeder.properties";
     private static final String RANDOM_ORG_URL_KEY = "random.org.url";
@@ -35,6 +36,9 @@ public class Seeder {
      * @param source A seed forrása (SYSTEM, RANDOM_ORG, ANU_QUANTUM, FOURMILAB)
      */
     public Seeder(SeedSource source) {
+        if (source == null) {
+            throw new NullPointerException("A forrás nem lehet null");
+        }
         this.source = source;
         try {
             Properties props = loadProperties();
@@ -90,6 +94,14 @@ public class Seeder {
                 new java.util.Random().nextBytes(bytes);
                 yield bytes;
             }
+            case NANOTIME -> {
+                byte[] bytes = new byte[numBytes];
+                long nanoTime = System.nanoTime();
+                for (int i = 0; i < numBytes; i++) {
+                    bytes[i] = (byte) ((nanoTime >> (i % 8 * 8)) & 0xFF);
+                }
+                yield bytes;
+            }
             case RANDOM_ORG -> getRandomOrgBytes(numBytes);
             case ANU_QUANTUM -> getANUQuantumBytes(numBytes);
             case FOURMILAB -> getFourmilabHotBits(numBytes);
@@ -103,7 +115,7 @@ public class Seeder {
      */
     private byte[] getRandomOrgBytes(int numBytes) {
         try {
-            String url = randomOrgUrl + "?num=" + numBytes + "&min=0&max=255&col=1&base=10&format=plain&rnd=new";
+            String url = String.format(randomOrgUrl, numBytes, 0, 255);
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -117,8 +129,11 @@ public class Seeder {
             }
             return result;
         } catch (Exception e) {
-            log.error("Hiba a Random.org lekérdezésekor", e);
-            return new byte[numBytes]; // Fallback üres tömbre
+            log.error("Hiba a Random.org lekérdezésekor: {}", e.getMessage());
+            // Fallback a rendszer véletlenszám-generátorára
+            byte[] fallbackBytes = new byte[numBytes];
+            new java.util.Random().nextBytes(fallbackBytes);
+            return fallbackBytes;
         }
     }
 
@@ -129,7 +144,7 @@ public class Seeder {
      */
     private byte[] getANUQuantumBytes(int numBytes) {
         try {
-            String url = anuQuantumUrl + "?length=" + numBytes + "&type=uint8";
+            String url = String.format(anuQuantumUrl, numBytes);
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -138,6 +153,13 @@ public class Seeder {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             // Egyszerű JSON feldolgozás a válaszból
             String jsonResponse = response.body();
+
+            // Ellenőrizzük, hogy a válasz tartalmazza-e a várt JSON struktúrát
+            if (!jsonResponse.contains("\"data\":[") || !jsonResponse.contains("]")) {
+                log.error("Érvénytelen ANU quantum válasz: nincs megfelelő karakter ([ vagy ]) a válaszban: {}", jsonResponse);
+                throw new IllegalStateException("Érvénytelen ANU quantum válasz: nincs megfelelő karakter ([ vagy ])");
+            }
+
             String dataStr = jsonResponse.split("\"data\":\\[")[1].split("\\]")[0];
             String[] numbers = dataStr.split(",");
             byte[] result = new byte[numBytes];
@@ -146,8 +168,11 @@ public class Seeder {
             }
             return result;
         } catch (Exception e) {
-            log.error("Hiba az ANU Quantum lekérdezésekor", e);
-            return new byte[numBytes]; // Fallback üres tömbre
+            log.error("Hiba az ANU Quantum lekérdezésekor: {}", e.getMessage());
+            // Fallback a rendszer véletlenszám-generátorára
+            byte[] fallbackBytes = new byte[numBytes];
+            new java.util.Random().nextBytes(fallbackBytes);
+            return fallbackBytes;
         }
     }
 
@@ -158,7 +183,7 @@ public class Seeder {
      */
     private byte[] getFourmilabHotBits(int numBytes) {
         try {
-            String url = fourmiLabUrl + "?nbytes=" + numBytes + "&fmt=bin";
+            String url = String.format(fourmiLabUrl, numBytes);
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -167,8 +192,11 @@ public class Seeder {
             HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
             return Arrays.copyOf(response.body(), numBytes);
         } catch (Exception e) {
-            log.error("Hiba a Fourmilab HotBits lekérdezésekor", e);
-            return new byte[numBytes]; // Fallback üres tömbre
+            log.error("Hiba a Fourmilab HotBits lekérdezésekor: {}", e.getMessage());
+            // Fallback a rendszer véletlenszám-generátorára
+            byte[] fallbackBytes = new byte[numBytes];
+            new java.util.Random().nextBytes(fallbackBytes);
+            return fallbackBytes;
         }
     }
 
