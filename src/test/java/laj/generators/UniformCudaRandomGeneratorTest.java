@@ -1,7 +1,6 @@
 package laj.generators;
 
 import jcuda.driver.CUcontext;
-import jcuda.jcurand.curandGenerator;
 import laj.generators.utils.Algorithm;
 import laj.generators.utils.GeneratorParams;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Konstruktor különböző paraméterekkel
  * - Algoritmus validáció
  * - Erőforrás-kezelés
- * 
  * Megjegyzés: Mivel a CUDA és cuRAND hívások valódi GPU-t igényelnek,
  * ezek a tesztek egy tesztspecifikus alosztályt használnak, amely felülírja
  * a CUDA-specifikus műveleteket a tesztelhetőség érdekében.
@@ -67,16 +65,11 @@ class UniformCudaRandomGeneratorTest {
             try {
                 // Megpróbáljuk leképezni az algoritmust
                 // Ha kivételt dob, akkor nem támogatott
-                switch (algo) {
-                    case XORWOW, SCALE_XORWOW, DRAW_XORWOW, SORTED_XORWOW:
-                    case MRG32K3A, SCALE_MRG32K3A:
-                    case MTGP32, SCALE_MTGP32:
-                    case MT19937, SCALE_MT19937:
-                    case PHILOX4_32_10, SCALE_PHILOX4_32_10:
-                        return true;
-                    default:
-                        return false;
-                }
+                return switch (algo) {
+                    case XORWOW, SCALE_XORWOW, DRAW_XORWOW, SORTED_XORWOW, MRG32K3A, SCALE_MRG32K3A, MTGP32,
+                         SCALE_MTGP32, MT19937, SCALE_MT19937, PHILOX4_32_10, SCALE_PHILOX4_32_10 -> true;
+                    default -> false;
+                };
             } catch (Exception e) {
                 return false;
             }
@@ -174,7 +167,7 @@ class UniformCudaRandomGeneratorTest {
             assertDoesNotThrow(() -> generator.generate(500));
 
             // Teszteljük a close metódust (nem dob kivételt)
-            assertDoesNotThrow(() -> generator.close());
+            assertDoesNotThrow(generator::close);
 
         } catch (Exception e) {
             fail("Nem várt kivétel: " + e.getMessage());

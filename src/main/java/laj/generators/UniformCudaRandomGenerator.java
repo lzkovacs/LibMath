@@ -11,16 +11,17 @@ import static jcuda.jcurand.JCurand.*;
 import static jcuda.jcurand.curandRngType.*;
 
 /**
+ * <h2>UniformCudaRandomGeneratorr</h2>
  * Egyenletes (uniform) eloszlású véletlenszám-generátor GPU-n, CUDA és cuRAND használatával.
  * <p>
  * A generátor a cuRAND könyvtárat használja különböző algoritmusok támogatásával, 
  * és a véletlen vektorokat közvetlenül a GPU memóriájába (device memory) generálja.
  * </p>
  * 
- * <h2>Példahasználat:</h2>
+ * <b>Példa használat:</b>
  * <pre>{@code
  * try (UniformCudaRandomGenerator generator = new UniformCudaRandomGenerator(params, context)) {
- *     generator.generate(n); // n darab véletlen számot generál
+ *     generator.generate(1000); // 1000 darab véletlen számot generál
  *     // Véletlen vektor elérése pl. generator.devPtr
  * }
  * }</pre>
@@ -30,8 +31,8 @@ import static jcuda.jcurand.curandRngType.*;
  * A generátor használata után mindig hívja meg a {@link #close()} metódust, akár automatizáltan 
  * a try-with-resources szerkezetben, hogy a GPU erőforrásokat felszabadítsa!
  * </p>
- *
- * @see GpuRandomGenerator Szülőosztály, amely általános GPU-s generálást támogat
+ * </pre>
+ * @see GpuRandomGenerator
  */
 public class UniformCudaRandomGenerator extends GpuRandomGenerator {
     
