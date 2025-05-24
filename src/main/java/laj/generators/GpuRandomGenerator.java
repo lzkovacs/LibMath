@@ -3,10 +3,10 @@ package laj.generators;
 import jcuda.Sizeof;
 import jcuda.driver.CUcontext;
 import jcuda.driver.CUdeviceptr;
-import laj.generators.utils.GeneratorParams;
-import lombok.Getter;
 import static jcuda.driver.JCudaDriver.cuCtxSetCurrent;
 import static jcuda.driver.JCudaDriver.cuMemAlloc;
+import laj.generators.utils.GeneratorParams;
+import lombok.Getter;
 
 /**
  * <h2>GpuRandomGenerator</h2>

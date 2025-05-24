@@ -1,10 +1,9 @@
 package laj.generators;
 
+import jcuda.driver.CUcontext;
+import laj.generators.utils.Algorithm;
 import laj.generators.utils.GeneratorParams;
 import laj.kernels.ScaleKernel;
-import laj.generators.utils.Algorithm;
-import jcuda.driver.CUcontext;
-import jcuda.driver.CUdeviceptr;
 
 /**
  * <h2>ScaledCudaRandomGenerator</h2>
@@ -84,23 +83,13 @@ public class ScaledCudaRandomGenerator extends GpuRandomGenerator {
         uniformGen.generate(n);
         scaleKernel.scale(
                 uniformGen.getDevPtr(),
-                uniformGen.getDevPtr(),
+                devPtr,
                 params.min(),
                 params.max(),
                 params.vectorSize()
         );
     }
 
-    /**
-     * Visszaadja a GPU memóriában lévő generált (és skálázott) vektor
-     * CUDA pointerét.
-     *
-     * @return {@link CUdeviceptr} – a GPU vektorra mutató cím.
-     */
-    @Override
-    public CUdeviceptr getDevPtr() {
-        return uniformGen.getDevPtr();
-    }
 
     /**
      * Az erőforrások felszabadítása.

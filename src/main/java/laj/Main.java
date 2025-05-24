@@ -9,6 +9,7 @@ import jcuda.driver.CUcontext;
 import jcuda.driver.CUdevice;
 import jcuda.driver.JCudaDriver;
 import laj.generators.ScaledCudaRandomGenerator;
+import laj.generators.SortedCudaRandomGenerator;
 import laj.generators.utils.Algorithm;
 import laj.generators.utils.GeneratorParams;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class Main {
         CUcontext context = new CUcontext();
         cuCtxCreate(context, 0, device);
 
-        // Generate and log 10 random numbers
+        // Generate and log 20 random numbers
         generateAndLogRandomNumbers(context);
 
         // Destroy the context
@@ -36,8 +37,8 @@ public class Main {
     }
 
     /**
-     * Generates 10 random numbers using ScaledCudaRandomGenerator and logs them.
-     * This method uses the ScaledCudaRandomGenerator to generate random numbers in GPU memory,
+     * Generates 20 random numbers using SortedCudaRandomGenerator and logs them.
+     * This method uses the SortedCudaRandomGenerator to generate random numbers in GPU memory,
      * then copies them back to CPU memory and logs them using Lombok logger.
      * 
      * @param context The CUDA context to use
@@ -45,29 +46,29 @@ public class Main {
     public static void generateAndLogRandomNumbers(CUcontext context) {
         // Create parameters for the generator
         GeneratorParams params = new GeneratorParams(
-                Algorithm.SCALE_XORWOW,  // Scaled GPU algorithm
-                42L,                     // Seed value
-                10,                      // Vector size (10 numbers)
-                true,                    // Transform enabled
-                1,                       // Min value
-                90,                      // Max value
-                5                        // Block size
+                Algorithm.SORTED_XORWOW,  // Sorted GPU algorithm
+                42L,                      // Seed value
+                20,                       // Vector size (20 numbers)
+                true,                     // Transform enabled
+                1,                        // Min value
+                90,                       // Max value
+                5                         // Block size
         );
 
         // Create the generator
-        ScaledCudaRandomGenerator generator = new ScaledCudaRandomGenerator(params, context);
+        SortedCudaRandomGenerator generator = new SortedCudaRandomGenerator(params, context);
 
         try {
-            // Generate 10 random numbers
-            generator.generate(10);
+            // Generate 20 random numbers
+            generator.generate(20);
 
             // Copy the numbers from GPU to CPU
-            float[] hostArray = new float[10];
+            float[] hostArray = new float[20];
             Pointer hostPointer = Pointer.to(hostArray);
-            cuMemcpyDtoH(hostPointer, generator.getDevPtr(), 10 * Sizeof.FLOAT);
+            cuMemcpyDtoH(hostPointer, generator.getDevPtr(), 20 * Sizeof.FLOAT);
 
             // Log the numbers
-            log.debug("Generated 10 random numbers:");
+            log.debug("Generated 20 random numbers:");
             for (int i = 0; i < hostArray.length; i++) {
                 log.debug("Number {}: {}", i + 1, hostArray[i]);
             }

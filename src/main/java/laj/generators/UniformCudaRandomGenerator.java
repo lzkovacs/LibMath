@@ -72,8 +72,6 @@ public class UniformCudaRandomGenerator extends GpuRandomGenerator {
         // Beállítjuk az aktuális kontextust a generálás előtt
         cuCtxSetCurrent(context);
         curandGenerateUniform(generator, devPtr, n);
-        // Beállítjuk az aktuális kontextust a szinkronizálás előtt
-        cuCtxSetCurrent(context);
         cuCtxSynchronize();
     }
     
