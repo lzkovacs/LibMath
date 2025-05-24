@@ -1,4 +1,4 @@
-package laj.generators.generator_utils;
+package laj.generators.utils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

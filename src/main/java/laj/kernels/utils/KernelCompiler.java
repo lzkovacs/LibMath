@@ -2,7 +2,7 @@
  * Copyright (c) 2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
 
-package laj.kernels.kernel_util;
+package laj.kernels.utils;
 
 public interface KernelCompiler {
     /**

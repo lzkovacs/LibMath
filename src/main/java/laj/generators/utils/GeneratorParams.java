@@ -2,7 +2,7 @@
 /*
  * Copyright (c) 2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
-package laj.generators.generator_utils;
+package laj.generators.utils;
 
 
 /**
@@ -11,7 +11,7 @@ package laj.generators.generator_utils;
  * @param algorithm A véletlenszám-generáláshoz használt algoritmus (alap vagy wrapper)
  * @param seed A generátor seed értéke
  * @param vectorSize A generált vektor hossza
- * @param transformEnabled Jelzi, hogy alkalmazzuk-e a transformációs lépést
+ * @param transformEnabled Jelzi, hogy alkalmazzuk-e a transzformációs lépést
  * @param min A transformáció során használt minimális érték
  * @param max A transformáció során használt maximális érték
  * @param k A rendezési blokkméret (DRAW/SORTED algoritmusoknál mintavételezéshez)

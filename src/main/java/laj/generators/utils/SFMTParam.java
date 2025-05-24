@@ -2,7 +2,7 @@
  * Copyright (c) 2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
 
-package laj.generators.generator_utils;
+package laj.generators.utils;
 
 public enum SFMTParam {
     P607(607, 2, 15, 3, 13, 3,

@@ -1,4 +1,4 @@
-package laj.generators.generator_utils;
+package laj.generators.utils;
 
 
 import lombok.Getter;
@@ -160,7 +160,7 @@ public class Seeder {
                 throw new IllegalStateException("Érvénytelen ANU quantum válasz: nincs megfelelő karakter ([ vagy ])");
             }
 
-            String dataStr = jsonResponse.split("\"data\":\\[")[1].split("\\]")[0];
+            String dataStr = jsonResponse.split("\"data\":\\[")[1].split("]")[0];
             String[] numbers = dataStr.split(",");
             byte[] result = new byte[numBytes];
             for (int i = 0; i < numBytes && i < numbers.length; i++) {

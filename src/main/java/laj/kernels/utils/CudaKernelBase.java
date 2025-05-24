@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2024-2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
-package laj.kernels.kernel_util;
+package laj.kernels.utils;
 
 import jcuda.driver.CUcontext;
 import jcuda.driver.CUfunction;
@@ -50,7 +50,6 @@ public abstract class CudaKernelBase implements AutoCloseable {
      * Inicializálja a CUDA modult és betölti a kernel függvényt.
      * Fordítja az adott kernel forrást (PTX generálás), betölti a modult,
      * ezután lekéri a megadott kernel függvény pointerét.
-     *
      * Hibás betöltés esetén kivételt dob.
      */
     private void initKernel() {
@@ -93,7 +92,6 @@ public abstract class CudaKernelBase implements AutoCloseable {
 
     /**
      * Felszabadítja a betöltött CUDA modult, ha az még létezik.
-     * 
      * A metódus többszöri hívása biztonságos, de csak egyszer hajtja végre a felszabadítást.
      */
     @Override
@@ -103,7 +101,7 @@ public abstract class CudaKernelBase implements AutoCloseable {
             cuCtxSetCurrent(context);
             cuModuleUnload(module);
             module = null;
-            log.info("Modul felszabadítva " + getKernelFunctionName());
+            log.info("Modul felszabadítva {}", getKernelFunctionName());
         }
     }
 }

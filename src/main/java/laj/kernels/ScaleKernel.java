@@ -6,9 +6,8 @@ package laj.kernels;
 import jcuda.Pointer;
 import jcuda.driver.CUcontext;
 import jcuda.driver.CUdeviceptr;
-import laj.kernels.kernel_util.CudaKernelBase;
-import laj.kernels.kernel_util.GridOptimizer;
-
+import laj.kernels.utils.CudaKernelBase;
+import laj.kernels.utils.GridOptimizer;
 import static jcuda.driver.JCudaDriver.*;
 
 /**
@@ -21,7 +20,7 @@ public class ScaleKernel extends CudaKernelBase {
 
     /**
      * Konstruktor: örökli a külső kontextust és betölti a PTX modult.
-     * Lekérdezi a GPU-korlátokat a GridOptimizer segítségével.
+     * Optimalizálja a gridméretet a GridOptimizer segítségével.
      *
      * @param context A megosztott CUDA kontextus
      */

@@ -2,11 +2,12 @@
  * Copyright (c) 2024-2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
 
-package laj.kernels.kernel_util;
+package laj.kernels.utils;
 
 import jcuda.driver.CUdevice;
 import jcuda.driver.CUdevice_attribute;
 import jcuda.driver.JCudaDriver;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import static jcuda.driver.JCudaDriver.*;
@@ -14,10 +15,22 @@ import static jcuda.driver.JCudaDriver.*;
 /**
  * Segédosztály a CUDA kernel grid és block méretek optimalizálásához.
  */
+@Getter
 @Log4j2
 public class GridOptimizer {
+    /**
+     * A CUDA eszköz által támogatott maximális grid X-dimenzió.
+     */
     private final int maxGridX;
+
+    /**
+     * A CUDA eszköz által támogatott maximális grid Y-dimenzió.
+     */
     private final int maxGridY;
+
+    /**
+     * Egy blokkban elhelyezhető szálak (threads) maximális száma a CUDA eszközön.
+     */
     private final int maxThreadsPerBlock;
 
     /**
@@ -40,7 +53,7 @@ public class GridOptimizer {
         cuDeviceGetAttribute(threadsPB, CUdevice_attribute.CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_BLOCK, device);
         this.maxThreadsPerBlock = threadsPB[0];
 
-        log.info("GPU korlátok: maxGridX={}, maxGridY={}, maxThreadsPerBlock={}", maxGridX, maxGridY, maxThreadsPerBlock);
+        log.debug("GPU korlátok: maxGridX={}, maxGridY={}, maxThreadsPerBlock={}", maxGridX, maxGridY, maxThreadsPerBlock);
     }
 
     /**
@@ -64,10 +77,4 @@ public class GridOptimizer {
         return new int[]{gridX, gridY, blockSize};
     }
 
-    /** @return A GPU által támogatott maximális gridX dimenzió */
-    public int getMaxGridX() { return maxGridX; }
-    /** @return A GPU által támogatott maximális gridY dimenzió */
-    public int getMaxGridY() { return maxGridY; }
-    /** @return A GPU által támogatott maximális szálak száma blokkban */
-    public int getMaxThreadsPerBlock() { return maxThreadsPerBlock; }
 }

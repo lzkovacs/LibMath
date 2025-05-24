@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2024-2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
-package laj.kernels.kernel_util;
+package laj.kernels.utils;
 
 import jcuda.CudaException;
 import jcuda.driver.CUdevice;
@@ -51,6 +51,7 @@ public class NvccKernelCompiler implements KernelCompiler {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private File createTempFile(InputStream in, String ext) throws IOException {
         File temp = File.createTempFile("kernel_", ext);
         temp.deleteOnExit();
@@ -64,7 +65,7 @@ public class NvccKernelCompiler implements KernelCompiler {
         return temp;
     }
 
-    private String invokeNvcc(String cuFileName, String targetType, boolean force, String... args) {
+    private String invokeNvcc(String cuFileName, @SuppressWarnings("SameParameterValue") String targetType, @SuppressWarnings("SameParameterValue") boolean force, String... args) {
         log.debug("NVCC indítása: {} -> {}", cuFileName, targetType);
         String existing = prepareOutput(cuFileName, targetType, force);
         if (existing != null) {

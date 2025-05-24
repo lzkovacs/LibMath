@@ -2,8 +2,8 @@
  * Copyright (c) 2024-2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
 package generators.generator_utils;
-import laj.generators.generator_utils.Seeder;
-import laj.generators.generator_utils.SeedSource;
+import laj.generators.utils.Seeder;
+import laj.generators.utils.SeedSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

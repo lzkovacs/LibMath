@@ -2,7 +2,7 @@
  * Copyright (c) 2024-2025. Hunc codicem scripsit Lajos, qui dicitur Kovács, ad suum solatium et eruditionem.
  */
 
-package laj.generators.generator_utils;
+package laj.generators.utils;
 /**
  * Felsoroló típus, amely különböző véletlenszám-forrásokat reprezentál, melyek maggeneráláshoz használhatók fel.
  * SYSTEM: A rendszer véletlenszám-generátorát használja.
