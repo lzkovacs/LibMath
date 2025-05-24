@@ -8,6 +8,7 @@ import jcuda.Sizeof;
 import jcuda.driver.CUcontext;
 import jcuda.driver.CUdevice;
 import jcuda.driver.JCudaDriver;
+import laj.generators.DrawJavaRandomGenerator;
 import laj.generators.SfmtJavaRandomGenerator;
 import laj.generators.SortedCudaRandomGenerator;
 import laj.generators.utils.Algorithm;
@@ -35,6 +36,9 @@ public class Main {
         // Generate and log 10 random numbers using SFMT
         generateAndLogSfmtRandomNumbers();
 
+        // Generate and log 20 random numbers using DrawJavaRandomGenerator
+        generateAndLogDrawRandomNumbers();
+
         // Destroy the context
         cuCtxDestroy(context);
     }
@@ -46,6 +50,7 @@ public class Main {
      * 
      * @param context The CUDA context to use
      */
+    @SuppressWarnings({"ExtractMethodRecommender", "LoggingSimilarMessage"})
     public static void generateAndLogRandomNumbers(CUcontext context) {
         // Create parameters for the generator
         GeneratorParams params = new GeneratorParams(
@@ -109,6 +114,39 @@ public class Main {
 
         // Log the numbers
         log.debug("SFMT 10 darab random:");
+        for (int i = 0; i < numbers.length; i++) {
+            log.debug("Number {}: {}", i + 1, numbers[i]);
+        }
+    }
+
+    /**
+     * Generates 20 random numbers using DrawJavaRandomGenerator and logs them.
+     * This method uses the DrawJavaRandomGenerator to generate random numbers in CPU memory
+     * and logs them using Lombok logger.
+     */
+    public static void generateAndLogDrawRandomNumbers() {
+        // Create parameters for the generator
+        GeneratorParams params = new GeneratorParams(
+                Algorithm.DRAW_JAVA_RANDOM,  // DRAW_JAVA_RANDOM algorithm
+                42L,                         // Seed value
+                20,                          // Vector size (20 numbers)
+                true,                        // Transform enabled
+                1,                           // Min value
+                90,                          // Max value
+                5                            // Block size
+        );
+
+        // Create the generator
+        DrawJavaRandomGenerator generator = new DrawJavaRandomGenerator(params);
+
+        // Generate 20 random numbers
+        generator.generate(20);
+
+        // Get the generated numbers
+        float[] numbers = generator.getVector();
+
+        // Log the numbers
+        log.debug("DrawJavaRandomGenerator: 20 darab random:");
         for (int i = 0; i < numbers.length; i++) {
             log.debug("Number {}: {}", i + 1, numbers[i]);
         }
