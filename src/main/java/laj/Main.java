@@ -8,7 +8,7 @@ import jcuda.Sizeof;
 import jcuda.driver.CUcontext;
 import jcuda.driver.CUdevice;
 import jcuda.driver.JCudaDriver;
-import laj.generators.ScaledCudaRandomGenerator;
+import laj.generators.SfmtJavaRandomGenerator;
 import laj.generators.SortedCudaRandomGenerator;
 import laj.generators.utils.Algorithm;
 import laj.generators.utils.GeneratorParams;
@@ -29,8 +29,11 @@ public class Main {
         CUcontext context = new CUcontext();
         cuCtxCreate(context, 0, device);
 
-        // Generate and log 20 random numbers
+        // Generate and log 20 random numbers using GPU
         generateAndLogRandomNumbers(context);
+
+        // Generate and log 10 random numbers using SFMT
+        generateAndLogSfmtRandomNumbers();
 
         // Destroy the context
         cuCtxDestroy(context);
@@ -68,13 +71,46 @@ public class Main {
             cuMemcpyDtoH(hostPointer, generator.getDevPtr(), 20 * Sizeof.FLOAT);
 
             // Log the numbers
-            log.debug("Generated 20 random numbers:");
+            log.debug("SortedCudaRandomGenerator: 20 darab random :");
             for (int i = 0; i < hostArray.length; i++) {
                 log.debug("Number {}: {}", i + 1, hostArray[i]);
             }
         } finally {
             // Close the generator to release resources
             generator.close();
+        }
+    }
+
+    /**
+     * Generates 10 random numbers using SfmtJavaRandomGenerator and logs them.
+     * This method uses the SfmtJavaRandomGenerator to generate random numbers in CPU memory
+     * and logs them using Lombok logger.
+     */
+    public static void generateAndLogSfmtRandomNumbers() {
+        // Create parameters for the generator
+        GeneratorParams params = new GeneratorParams(
+                Algorithm.SFMT,      // SFMT algorithm
+                42L,                 // Seed value
+                10,                  // Vector size (10 numbers)
+                true,                // Transform enabled
+                1,                   // Min value
+                90,                  // Max value
+                5                    // Block size
+        );
+
+        // Create the generator
+        SfmtJavaRandomGenerator generator = new SfmtJavaRandomGenerator(params);
+
+        // Generate 10 random numbers
+        generator.generate(10);
+
+        // Get the generated numbers
+        float[] numbers = generator.getVector();
+
+        // Log the numbers
+        log.debug("SFMT 10 darab random:");
+        for (int i = 0; i < numbers.length; i++) {
+            log.debug("Number {}: {}", i + 1, numbers[i]);
         }
     }
 }

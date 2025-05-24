@@ -11,7 +11,7 @@ import static jcuda.jcurand.JCurand.*;
 import static jcuda.jcurand.curandRngType.*;
 
 /**
- * <h2>UniformCudaRandomGeneratorr</h2>
+ * <h2>UniformCudaRandomGenerator</h2>
  * Egyenletes (uniform) eloszlású véletlenszám-generátor GPU-n, CUDA és cuRAND használatával.
  * <p>
  * A generátor a cuRAND könyvtárat használja különböző algoritmusok támogatásával, 
@@ -28,7 +28,7 @@ import static jcuda.jcurand.curandRngType.*;
  * 
  * <p>
  * Erőforrás-menedzsment: 
- * A generátor használata után mindig hívja meg a {@link #close()} metódust, akár automatizáltan 
+ * A generátor használata után mindig meg kell hívni a {@link #close()} metódust, akár automatizáltan
  * a try-with-resources szerkezetben, hogy a GPU erőforrásokat felszabadítsa!
  * </p>
  * </pre>

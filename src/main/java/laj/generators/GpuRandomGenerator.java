@@ -64,7 +64,7 @@ public abstract class GpuRandomGenerator {
      * @param context A CUDA kontextus, amelyben a generátor működik (nem lehet {@code null}).
      * @throws IllegalArgumentException ha a context értéke {@code null}.
      */
-    GpuRandomGenerator(GeneratorParams params, CUcontext context){
+    protected GpuRandomGenerator(GeneratorParams params, CUcontext context){
         if (context == null) {
             throw new IllegalArgumentException("GpuRandomGenerator: A CUDA context nem lehet null");
         }
